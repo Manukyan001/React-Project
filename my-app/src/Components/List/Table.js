@@ -1,6 +1,10 @@
-import React from 'react'
-const Table = (props) =>{
-    const {currencies , renderChangePercent ,} = props
+import React from 'react';
+import {withRouter} from 'react-router-dom';
+import renderChangePercent from '../../Helpers/renderChangePercent'
+
+const Table = ({currencies ,   history,  ...props}) =>{
+
+    
     return(
         <div className="Table-container"> 
         <table className="Table">
@@ -14,7 +18,7 @@ const Table = (props) =>{
           </thead> 
           <tbody className="Table-body">
           {currencies.map((currency) => (
-            <tr key={currency.id} >
+            <tr key={currency.id} onClick={() => history.push(`/currency/${currency.id}`)} >
               <td>
                 <span className="Table-rank">{currency.rank}</span>
                 {currency.name}
@@ -39,4 +43,4 @@ const Table = (props) =>{
     )
 }
 
-export default Table
+export default withRouter(Table)
