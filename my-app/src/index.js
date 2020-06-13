@@ -1,31 +1,26 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Switch , Route} from 'react-router-dom';
+import List from './components/list/List';
+import Header from './components/common/Header';
+import NotFound from './components/not-found/notFound';
+import Details from "./components/details/details";
 import './index.css';
-import Header from './Components/Header/Header';
-import List from './Components/List/List';
-import NotFound from './Components/NotFound/NotFound'
-import Detail from './Components/Detail/Detail'
-
-
 
 const App = () => {
-    return(
-        <BrowserRouter>
-            <Header/>
+  return (
+     <BrowserRouter>
+            <Header />
             <Switch>
-                <Route path='/' component={List} exact/>
-    <Route path='/currency/:id' component={Detail}/>
+                <Route path='/' component={List} exact />
+                <Route path='/currency/:id' component={Details}/>
                 <Route component={NotFound}/>
-
-            </Switch> 
-        </BrowserRouter>
-    );
+            </Switch>
+    </BrowserRouter>
+  );
 }
 
-
 ReactDOM.render(
-    <App />,
-    document.getElementById('root')
+  <App />,
+  document.getElementById('root')
 );
-

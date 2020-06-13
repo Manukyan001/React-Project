@@ -1,75 +1,77 @@
-import React from 'react'
-import fetchService from '../../Services/FetchSercie';
-import './Table.css'
-import Table from './Table'
-import Pagination from '../Pagination/Pagination';
-import Loading from '../Loading/Loading';
+import React from 'react';
+import fetchService from "../../services/FetchService";
+import Table from "./Table";
+import Pagination from "../pagination/pagination";
+import Loading from "../loading/loading";
+import CurrenciesContext from "../../context/currencies" ; 
+import './table.css'
+
+class List extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      loading: true,
+      currencies: [],
+      error: null,
+      page: 1,
+      totalPages: 0
+    };
+  }
 
 
-class List extends React.Component{
 
-    constructor(){
-        super();
-
-        this.state = {
-            loading: true,
-            currencies: [],
-            error: null,
-            page: 1 ,
-            totalPages : 0
-        };
-    }
-
-      
-
-    handlePaginationClick = direction => {
+  handlePaginationClick = direction => {
       if(direction === 'next'){
-        this.setState(prev => ({page : prev.page + 1}) , this.currenciesGetter)
+          this.setState(prev => ({page : prev.page + 1}) , this.currenciesGetter);
       }else{
-        this.setState(prev => ({ page : prev.page - 1}), this.currenciesGetter)
+          this.setState(prev => ({page: prev.page - 1}), this.currenciesGetter);
       }
-    }
 
-    currenciesGetter = async () => {
-        const {page} = this.state;
-        const response = await fetchService.get(`cryptocurrencies?page=${page}&perPage=20`)
+  };
+
+   currenciesGetter = async () => {
+    const { page } = this.state;
+     const response = await fetchService.get(`cryptocurrencies?page=${page}&perPage=20`);
         this.setState({
-            currencies: response.currencies,
-            loading:false,
-            totalPages: response.totalPages,
-            page: response.page
+          currencies: response.currencies,
+          loading: false,
+           totalPages: response.totalPages,
         })
+   }
+
+
+
+   componentDidMount() {
+
+    this.currenciesGetter()
+
+  }
+
+  render() {
+    const { loading, currencies, totalPages , page} = this.state;
+
+    if (loading) {
+      return <div className='loading-container'>
+          <Loading/>
+      </div>
     }
-
-
-   
-
-     componentDidMount(){
-        
-
-        this.currenciesGetter()
-        
-    }
-
-    render(){
-        const{loading , currencies , totalPages , page} = this.state
-
-        console.log(currencies)
-        if(loading){
-            return <div className='loading-container'><Loading/></div>
-        }
-        return(
-            <>
-            <Table 
-            currencies={currencies}
+    return (
+        <CurrenciesContext.Provider value={currencies}>
+            <Table
+                
             />
-              <Pagination handlePaginationClick={this.handlePaginationClick}
-              totalPages={totalPages}
-              page={page}
-              />
-            </>
-        )
-    }
+            <Pagination
+                handlePaginationClick={this.handlePaginationClick}
+                totalPages={totalPages}
+                page={page}
+            />
+        </CurrenciesContext.Provider>
+
+
+
+    );
+  }
 }
 
-export  default List
+export default List;
